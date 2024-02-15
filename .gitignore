@@ -12,3 +12,8 @@ build/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+# Fix bug with plugin
+build-plugin/gradle
+build-plugin/gradlew
+build-plugin/gradlew.bat

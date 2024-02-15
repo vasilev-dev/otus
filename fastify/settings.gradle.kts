@@ -1,4 +1,4 @@
-rootProject.name = "my-project"
+rootProject.name = "fastify"
 
 dependencyResolutionManagement {
     versionCatalogs {

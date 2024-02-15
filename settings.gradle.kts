@@ -10,5 +10,5 @@ plugins {
 }
 rootProject.name = "otus"
 
-includeBuild("my-project")
+includeBuild("fastify")
 includeBuild("lessons")

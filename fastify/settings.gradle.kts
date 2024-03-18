@@ -24,4 +24,5 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
 
-include(":my-project-tmp")
+include(":fastify-api")
+include(":fastify-api-v1-jackson")

@@ -26,3 +26,5 @@ plugins {
 
 include(":fastify-api")
 include(":fastify-api-v1-jackson")
+include(":fastify-api-v1-mappers")
+include(":fastify-common")

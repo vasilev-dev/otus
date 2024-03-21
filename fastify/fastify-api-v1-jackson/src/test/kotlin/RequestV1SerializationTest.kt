@@ -1,5 +1,5 @@
-import dev.vasilev.fastify.api.apiV1Mapper
 import dev.vasilev.fastify.api.v1.models.CancelCurrentFastingRequest
+import dev.vasilev.fastify.fastify.api.v1.apiV1Mapper
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -32,3 +32,4 @@ class RequestV1SerializationTest {
         assertEquals(request, obj)
     }
 }
+

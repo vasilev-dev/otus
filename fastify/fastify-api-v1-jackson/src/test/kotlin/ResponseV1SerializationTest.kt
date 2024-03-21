@@ -1,21 +1,19 @@
-import dev.vasilev.fastify.api.apiV1Mapper
-import dev.vasilev.fastify.api.v1.models.Scheme
-import dev.vasilev.fastify.api.v1.models.SchemeEnum
-import dev.vasilev.fastify.api.v1.models.StartFastingResponse
+import dev.vasilev.fastify.api.v1.models.SchemeResponse
+import dev.vasilev.fastify.api.v1.models.FastingResponse
+import dev.vasilev.fastify.fastify.api.v1.apiV1Mapper
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class ResponseV1SerializationTest {
-    private val response = StartFastingResponse(
+    private val response = FastingResponse(
         id = 1,
         startDate = "2024-03-18T13:09:21.790Z",
         expectedEndDate = "2024-03-19T13:09:21.790Z",
         actualEndDate = null,
         canceled = false,
-        scheme = Scheme(
+        scheme = SchemeResponse(
             id = 1,
-            scheme = SchemeEnum._16_MINUS8,
             name = "16-8",
             difficulty = 1,
             fastingPeriod = 16,
@@ -36,7 +34,7 @@ class ResponseV1SerializationTest {
     @Test
     fun deserialize() {
         val json = apiV1Mapper.writeValueAsString(response)
-        val obj = apiV1Mapper.readValue(json, StartFastingResponse::class.java)
+        val obj = apiV1Mapper.readValue(json, FastingResponse::class.java)
 
         assertEquals(response, obj)
     }

@@ -1,4 +1,4 @@
-package dev.vasilev.fastify.api
+package dev.vasilev.fastify.fastify.api.v1
 
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper

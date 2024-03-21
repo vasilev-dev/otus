@@ -29,25 +29,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/startFastingResponse'
-        400:
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/manyClientErrorResponse'
+                $ref: '#/components/schemas/fastingResponse'
         401:
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
 
   /fastings/current:
     get:
@@ -64,7 +58,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cancelCurrentFastingResponse'
+                $ref: '#/components/schemas/fastingResponse'
         204:
           description: No content
         401:
@@ -72,13 +66,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
 
   /fastings/current/cancel:
     put:
@@ -102,25 +96,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cancelCurrentFastingResponse'
+                $ref: '#/components/schemas/fastingResponse'
         401:
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         404:
           description: Not found current fasting
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
 
   /fastings/history:
     get:
@@ -137,19 +131,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getFastingHistoryResponse'
+                $ref: '#/components/schemas/manyFastingsResponse'
         401:
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
 
   /schemes:
     get:
@@ -166,19 +160,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getAvailableSchemesResponse'
+                $ref: '#/components/schemas/manySchemesResponse'
         401:
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
 
   /schemes/default:
     get:
@@ -195,19 +189,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getDefaultSchemeResponse'
+                $ref: '#/components/schemas/schemeResponse'
         401:
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
 
   /schemes/{id}/default:
     put:
@@ -225,25 +219,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/setDefaultSchemeResponse'
+                $ref: '#/components/schemas/schemeResponse'
         401:
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         404:
           description: Not found scheme
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseErrorResponse'
+                $ref: '#/components/schemas/errorResponse'
 
 components:
   parameters:
@@ -253,11 +247,7 @@ components:
       required: true
       description: Environment enums
       schema:
-        type: string
-        enum:
-          - prod
-          - test
-          - stub
+        $ref: '#/components/schemas/environmentParam'
 
     stub:
       name: stub
@@ -265,14 +255,7 @@ components:
       required: true
       description: Stub enums
       schema:
-        type: string
-        enum:
-          - success
-          - noContent
-          - clientError
-          - unauthorizedError
-          - notFoundError
-          - serverError
+        $ref: '#/components/schemas/stubParam'
 
     schemeId:
       name: schemeId
@@ -283,7 +266,24 @@ components:
         type: integer
 
   schemas:
-    fasting:
+    environmentParam:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    stubParam:
+      type: string
+      enum:
+        - success
+        - noContent
+        - clientError
+        - unauthorizedError
+        - notFoundError
+        - serverError
+
+    fastingResponse:
       type: object
       description: Fasting info
       properties:
@@ -306,19 +306,25 @@ components:
           type: boolean
           description: Fasting has been canceled
         scheme:
-          $ref: '#/components/schemas/scheme'
+          $ref: '#/components/schemas/schemeResponse'
 
-    scheme:
+    manyFastingsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/fastingResponse'
+
+    schemeResponse:
       type: object
       properties:
         id:
           type: integer
           description: Scheme ID
-        scheme:
-          $ref: '#/components/schemas/schemeEnum'
         name:
           type: string
           description: Scheme name
+        description:
+          type: string
+          description: Scheme description
         difficulty:
           type: integer
           description: Scheme difficulty
@@ -329,16 +335,12 @@ components:
           type: integer
           description: Meal period
 
-    schemeEnum:
-      type: string
-      description: Fasting scheme enum
-      enum:
-        - '14-10'
-        - '16-8'
-        - '18-6'
-        - '20-4'
+    manySchemesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/schemeResponse'
 
-    baseErrorResponse:
+    errorResponse:
       type: object
       description: Error
       properties:
@@ -348,34 +350,14 @@ components:
         message:
           type: string
           description: Error message
-
-    clientErrorResponse:
-      allOf:
-        - $ref: '#/components/schemas/baseErrorResponse'
-      properties:
         field:
           type: string
           description: Invalid field
 
-    manyClientErrorResponse:
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/clientErrorResponse'
-
-    startFastingResponse:
-      allOf:
-        - $ref: '#/components/schemas/fasting'
-
-    GetCurrentFastingResponse:
-      allOf:
-        - $ref: '#/components/schemas/fasting'
-
-    getFastingHistoryResponse:
+    manyErrorsResponse:
       type: array
       items:
-        $ref: '#/components/schemas/fasting'
+        $ref: '#/components/schemas/errorResponse'
 
     cancelCurrentFastingRequest:
       type: object
@@ -383,18 +365,3 @@ components:
         save:
           type: boolean
           description: Save fasting in history
-
-    cancelCurrentFastingResponse:
-      allOf:
-        - $ref: '#/components/schemas/fasting'
-
-    getAvailableSchemesResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/scheme'
-
-    getDefaultSchemeResponse:
-      $ref: '#/components/schemas/scheme'
-
-    setDefaultSchemeResponse:
-      $ref: '#/components/schemas/scheme'

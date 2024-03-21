@@ -1,4 +1,4 @@
-package com.otus.otuskotlin.marketplace
+package dev.vasilev.fastify.fastify.api
 
 fun main() {
     println("Hello World!")

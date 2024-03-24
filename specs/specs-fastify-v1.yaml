@@ -1,0 +1,367 @@
+openapi: 3.0.3
+info:
+  title: "Fastify ${VERSION_APP}"
+  description: "Intermittent fasting tracking."
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: Fasting
+    description: Intermittent fasting
+  - name: Scheme
+    description: Fasting schemes
+paths:
+  /fastings:
+    post:
+      tags:
+        - Fasting
+      summary: Start a fasting
+      operationId: StartFasting
+      parameters:
+        - $ref: '#/components/parameters/environment'
+        - $ref: '#/components/parameters/stub'
+      responses:
+        200:
+          description: Started fasting info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fastingResponse'
+        401:
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /fastings/current:
+    get:
+      tags:
+        - Fasting
+      summary: Get information about current fasting
+      operationId: GetCurrentFasting
+      parameters:
+        - $ref: '#/components/parameters/environment'
+        - $ref: '#/components/parameters/stub'
+      responses:
+        200:
+          description: Current fasting info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fastingResponse'
+        204:
+          description: No content
+        401:
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /fastings/current/cancel:
+    put:
+      tags:
+        - Fasting
+      summary: Cancel current fasting
+      operationId: CancelCurrentFasting
+      parameters:
+        - $ref: '#/components/parameters/environment'
+        - $ref: '#/components/parameters/stub'
+      requestBody:
+        description: Cancel current fasting request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cancelCurrentFastingRequest'
+        required: true
+      responses:
+        200:
+          description: Canceled fasting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fastingResponse'
+        401:
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        404:
+          description: Not found current fasting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /fastings/history:
+    get:
+      tags:
+        - Fasting
+      summary: Get fasting history
+      operationId: GetFastingHistory
+      parameters:
+        - $ref: '#/components/parameters/environment'
+        - $ref: '#/components/parameters/stub'
+      responses:
+        200:
+          description: Current fasting history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/manyFastingsResponse'
+        401:
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /schemes:
+    get:
+      tags:
+        - Scheme
+      summary: Get available fasting schemes
+      operationId: GetAvailableSchemes
+      parameters:
+        - $ref: '#/components/parameters/environment'
+        - $ref: '#/components/parameters/stub'
+      responses:
+        200:
+          description: Available fasting schemes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/manySchemesResponse'
+        401:
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /schemes/default:
+    get:
+      tags:
+        - Scheme
+      summary: Get default current fasting scheme
+      operationId: GetDefaultScheme
+      parameters:
+        - $ref: '#/components/parameters/environment'
+        - $ref: '#/components/parameters/stub'
+      responses:
+        200:
+          description: Current default scheme
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/schemeResponse'
+        401:
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /schemes/{id}/default:
+    put:
+      tags:
+        - Scheme
+      summary: Set default scheme
+      operationId: SetDefaultScheme
+      parameters:
+        - $ref: '#/components/parameters/schemeId'
+        - $ref: '#/components/parameters/environment'
+        - $ref: '#/components/parameters/stub'
+      responses:
+        200:
+          description: Current default scheme
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/schemeResponse'
+        401:
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        404:
+          description: Not found scheme
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+components:
+  parameters:
+    environment:
+      name: environment
+      in: query
+      required: true
+      description: Environment enums
+      schema:
+        $ref: '#/components/schemas/environmentParam'
+
+    stub:
+      name: stub
+      in: query
+      required: true
+      description: Stub enums
+      schema:
+        $ref: '#/components/schemas/stubParam'
+
+    schemeId:
+      name: schemeId
+      in: path
+      required: true
+      description: Scheme ID
+      schema:
+        type: integer
+
+  schemas:
+    environmentParam:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    stubParam:
+      type: string
+      enum:
+        - success
+        - noContent
+        - clientError
+        - unauthorizedError
+        - notFoundError
+        - serverError
+
+    fastingResponse:
+      type: object
+      description: Fasting info
+      properties:
+        id:
+          type: integer
+          description: Fasting ID
+        startDate:
+          type: string
+          format: date-time
+          description: Start fasting time
+        expectedEndDate:
+          type: string
+          format: date-time
+          description: Expected fasting time
+        actualEndDate:
+          type: string
+          format: date-time
+          description: Actual fasting time
+        canceled:
+          type: boolean
+          description: Fasting has been canceled
+        scheme:
+          $ref: '#/components/schemas/schemeResponse'
+
+    manyFastingsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/fastingResponse'
+
+    schemeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Scheme ID
+        name:
+          type: string
+          description: Scheme name
+        description:
+          type: string
+          description: Scheme description
+        difficulty:
+          type: integer
+          description: Scheme difficulty
+        fastingPeriod:
+          type: integer
+          description: Fasting period
+        mealPeriod:
+          type: integer
+          description: Meal period
+
+    manySchemesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/schemeResponse'
+
+    errorResponse:
+      type: object
+      description: Error
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message
+        field:
+          type: string
+          description: Invalid field
+
+    manyErrorsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/errorResponse'
+
+    cancelCurrentFastingRequest:
+      type: object
+      properties:
+        save:
+          type: boolean
+          description: Save fasting in history

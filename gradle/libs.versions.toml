@@ -2,9 +2,11 @@
 kotlin = "1.9.22"
 kotlinx-datetime = "0.5.0"
 kotlinx-serialization = "1.6.3"
+coroutines = "1.8.0"
 binaryCompabilityValidator = "0.13.2"
 openapi-generator = "7.3.0"
 jackson = "2.16.1"
+spring-boot = "3.2.0"
 jvm-compiler = "11"
 jvm-language = "17"
 
@@ -16,9 +18,24 @@ kotlinx-serialization-core = {module = "org.jetbrains.kotlinx:kotlinx-serializat
 kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization"}
 jackson-kotlin = {module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson"}
 jackson-datatype = {module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson"}
+spring-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
+spring-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version = "2.3.0" }
+spring-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "coroutines" }
+coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "coroutines" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "5.2.1" }
+logback-appenders = { module = "com.sndyuk:logback-more-appenders", version = "1.8.8" }
+logger-fluentd = { module = "org.fluentd:fluent-logger", version = "0.3.4" }
+logback-logstash = { module = "net.logstash.logback:logstash-logback-encoder", version = "7.4" }
 
 [plugins]
 kotlin-multiplatform = {id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin"}
 kotlin-jvm = {id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin"}
 openapi-generator = {id = "org.openapi.generator", version.ref = "openapi-generator"}
 kotlinx-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependencies = { id = "io.spring.dependency-management", version = "1.1.4" }
+spring-kotlin = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
